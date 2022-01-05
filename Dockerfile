@@ -22,6 +22,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # install miscellaneous ros2 packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-foxy-joy-linux \
+    ros-foxy-realsense2-camera \
+    ros-foxy-cartographer-ros \
     && rm -rf /var/lib/apt/lists/*
 
 # install some text editors
@@ -46,4 +48,4 @@ RUN printf "neofetch\n" >> ~/.bashrc
 RUN printf "printf \"Entered ROS2 container: Use <ros2 -h> to see available commands.\n\n\"" >> ~/.bashrc
 
 # Enter workspace
-WORKDIR /foxy_ws
+WORKDIR /root/workspaces

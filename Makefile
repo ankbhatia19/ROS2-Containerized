@@ -21,17 +21,17 @@ container: clean xsetup
 		printf "\n$(NAME) container already running: Use <make terminal> to enter container.\n\n"; \
 		exit 1; \
 	fi
-	@docker run -dit \
+	@docker run -dt \
 		--privileged \
     		-p $1:8800 \
     		--rm \
-		--shm-size="2g"\
+		--shm-size="2g" \
     		-e XAUTHORITY=$(XAUTH) \
 		-e DISPLAY=$(DISPLAY) \
     		-e QT_GRAPHICSSYSTEM=native \
 		-v $(XSOCK):$(XSOCK):rw \
 		-v $(XAUTH):$(XAUTH):rw \
-		-v $(PWD)/foxy_ws:/foxy_ws \
+		-v $(PWD)/workspaces:/root/workspaces \
     		-v /tmp/.gazebo:/root/.gazebo \
     		--name $(NAME) \
     		$(NAME)
@@ -56,7 +56,7 @@ clean:
 	fi
 
 deepclean: clean
-	@docker system prune -f
+	@docker system prune -af
 
 status:
 	@if [ $(RUNNING) ]; then \
