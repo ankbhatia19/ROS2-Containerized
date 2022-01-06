@@ -2,6 +2,15 @@
 
 Created for and primarily used by Triton Robotics, a UCSD competitive robotics team.
 
+- [ROS2: Containerized](#ros2-containerized)
+    - [Features](#features)
+    - [Prerequisites](#prerequisites)
+    - [Setup](#setup)
+    - [Usage](#usage)
+    - [Workspaces](#workspaces)
+    - [Package Installation](#package-installation)
+    - [Issues](#issues)
+
 ### Features
 
 * Fully modularized: Can be installed onto any system with the appropriate prerequisites
@@ -9,7 +18,7 @@ Created for and primarily used by Triton Robotics, a UCSD competitive robotics t
 * Automated install, powered by Docker
 * Ease of accessibility, powered by a custom Makefile
 
-### Prerequisites:
+### Prerequisites
 
 1. [Docker](https://docs.docker.com/get-docker/)
    1. Install Docker using above link
@@ -23,7 +32,7 @@ Created for and primarily used by Triton Robotics, a UCSD competitive robotics t
 2. Make, which can be installed using `sudo apt install build-essential` on most Debian based systems.
 3. Basic knowledge of container based applications, which you can read about [here](https://docker-curriculum.com/).
 
-### Setup Guide:
+### Setup
 
 1. Clone this repo.
 
@@ -54,6 +63,21 @@ git clone https://github.com/ankbhatia19/ROS2-Containerized.git
   * This folder is synced across your host system and the ROS2 container.
   * This allows you to edit your code using your host OS and preferred IDE, and prevents code from being deleted when the container stops running.
 * See [this tutorial](https://docs.ros.org/en/foxy/Tutorials/Workspace/Creating-A-Workspace.html) for more information on workspace management.
+
+### Package Installation
+
+Since container based systems do not remember installations after the container stops running, it is necessary to add additional installations to the Dockerfile itself.
+
+* Additional packages can be added to the Dockerfile by adding the package to the user specific packages section.
+
+  ```bash
+  # user specific packages
+  RUN apt-get update && apt-get install -y --no-install-recommends \
+      # package-name-here \
+      && rm -rf /var/lib/apt/lists/*
+  ```
+* After updating the Dockerfile, run `make dockerfile` to install added packages and regenerate the container image.
+* Restart the container using `make container`
 
 ### Issues
 
