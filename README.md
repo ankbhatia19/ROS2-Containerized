@@ -17,7 +17,7 @@ Created for and primarily used by Triton Robotics, a UCSD competitive robotics t
 
       ```bash
       sudo systemctl enable docker.service
-      sudo sustemctl enable containerd.service
+      sudo systemctl enable containerd.service
       sudo usermod -aG docker $USER
       ```
 2. Make, which can be installed using `sudo apt install build-essential` on most Debian based systems.
