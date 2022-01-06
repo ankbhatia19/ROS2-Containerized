@@ -38,8 +38,13 @@ git clone https://github.com/ankbhatia19/ROS2-Containerized.git
 `cd` inside the ROS2-Containerized folder (Where the Makefile and Dockerfile files are located). The Makefile provides a set of commands available for ease of accessibility.
 
 * `make help`: Prints out all commands available to use.
-* `make container`: Creates a container which runs Ubuntu 21.04 LTS and has ROS2 and all dependencies installed. The container will stop running whenever your computer is shut down. Hence, `make container` will have to be manuallly run after computer startup **once** before usage. Re-running `make container` while a container is already running will delete the previous, running container and replace it with a new one.
-* `make terminal`: "Teleports" you inside the ROS2 container, allowing you to access all ROS2 commands. This command can be run from many different instances of a terminal to access the same container, allowing you to run multiple nodes inside the same container. Many terminals, one container.
+* `make container`: Creates a container which utilizes Ubuntu 21.04 LTS and has ROS2 and all dependencies installed.
+  * The container will stop running whenever your computer is shut down.
+    * `make container` will have to be manuallly run after computer startup **once** before usage.
+  * Re-running `make container` while a container is already running will delete the previous, running container and replace it with a new one.
+* `make terminal`: "Teleports" you inside the ROS2 container, allowing you to access all ROS2 commands.
+  * This command can be run from many different instances of a terminal to access the same container, allowing you to run multiple nodes inside the same container.
+  * Many terminals, one container.
 * `make clean`: Stops the container, if it is running.
 * `make status`: Indicates whether the container is running or not.
 
