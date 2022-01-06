@@ -26,6 +26,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-foxy-cartographer-ros \
     && rm -rf /var/lib/apt/lists/*
 
+# user specific packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # package-name-here \
+    && rm -rf /var/lib/apt/lists/*
+
 # install some text editors
 RUN apt-get update && apt-get install -y --no-install-recommends \
     vim \
@@ -33,7 +38,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gedit \
     && rm -rf /var/lib/apt/lists/*
 
-# miscellaneous installs
+# non ROS miscellaneous installs
 RUN apt-get update && apt-get install -y --no-install-recommends \
     neofetch \
     && rm -rf /var/lib/apt/lists/*
