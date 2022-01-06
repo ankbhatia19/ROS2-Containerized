@@ -12,7 +12,14 @@ Created for and primarily used by Triton Robotics, a UCSD competitive robotics t
 ### Prerequisites:
 
 1. [Docker](https://docs.docker.com/get-docker/)
-   1. Ensure Docker is enabled to run on startup
+   1. Install Docker using above link
+   2. Ensure Docker is enabled to run on startup and added to the `docker` group. Restart your computer after running these commands:
+
+      ```bash
+      sudo systemctl enable docker.service
+      sudo sustemctl enable containerd.service
+      sudo usermod -aG docker $USER
+      ```
 2. Make, which can be installed using `sudo apt install build-essential` on most Debian based systems.
 
 ### Setup Guide:
@@ -29,15 +36,11 @@ git clone https://github.com/ankbhatia19/ROS2-Containerized.git
 
 `cd` inside the ROS2-Containerized folder (Where the Makefile and Dockerfile files are located). The Makefile provides a set of commands available for ease of accessibility.
 
-`make help`: Prints out all commands available to use.
-
-`make container`: Creates a container which runs Ubuntu 21.04 LTS and has ROS2 and all dependencies installed. The container will stop running whenever your computer is shut down. Hence, `make container` will have to be manuallly run after computer startup **once** before usage. Re-running `make container` while a container is already running will delete the previous, running container and replace it with a new one.
-
-`make terminal`: "Teleports" you inside the ROS2 container, allowing you to access all ROS2 commands. This command can be run from many different instances of a terminal to access the same container, allowing you to run multiple nodes inside the same container. Many terminals, one container.
-
-`make clean`: Stops the container, if it is running.
-
-`make status`: Indicates whether the container is running or not.
+* `make help`: Prints out all commands available to use.
+* `make container`: Creates a container which runs Ubuntu 21.04 LTS and has ROS2 and all dependencies installed. The container will stop running whenever your computer is shut down. Hence, `make container` will have to be manuallly run after computer startup **once** before usage. Re-running `make container` while a container is already running will delete the previous, running container and replace it with a new one.
+* `make terminal`: "Teleports" you inside the ROS2 container, allowing you to access all ROS2 commands. This command can be run from many different instances of a terminal to access the same container, allowing you to run multiple nodes inside the same container. Many terminals, one container.
+* `make clean`: Stops the container, if it is running.
+* `make status`: Indicates whether the container is running or not.
 
 ### Workspaces
 
