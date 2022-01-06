@@ -21,6 +21,7 @@ Created for and primarily used by Triton Robotics, a UCSD competitive robotics t
       sudo usermod -aG docker $USER
       ```
 2. Make, which can be installed using `sudo apt install build-essential` on most Debian based systems.
+3. Basic knowledge of container based applications, which you can read about [here](https://docker-curriculum.com/).
 
 ### Setup Guide:
 
