@@ -1,13 +1,24 @@
 NAME = ros2
+
+# The following variables are used to control the automatic generation of the docker container
+CREATED = $$(docker images -q $(NAME) 2> /dev/null)
 RUNNING = $$(docker ps -q -f name=$(NAME))
 EXISTS = $$(docker ps -aq -f name=$(NAME))
 
+# Mount points for X authorization
 XSOCK = /tmp/.X11-unix
 XAUTH = /tmp/.docker.xauth
 
-default: help status
+# Default rule for creating and running the container
+default:
+	@if [ ! $(CREATED) ]; then \
+		$(MAKE) dockerfile; \
+	fi
+	@if [ ! $(RUNNING) ]; then \
+		$(MAKE) container; \
+	fi
+	@$(MAKE) terminal
 
-all: dockerfile container terminal
 
 dockerfile:
 	docker build -t $(NAME) .
@@ -59,21 +70,19 @@ deepclean: clean
 	@docker system prune -af
 
 status:
-	@if [ $(RUNNING) ]; then \
-		printf "\n$(NAME) container running: Use <make terminal> to enter container.\n\n"; \
-	else \
-		printf "\n$(NAME) container not running: Use <make container> to initialize.\n\n"; \
-	fi
+	@printf "\n$(NAME) container status:\n"
+	@printf "\tCreated: $(CREATED)\n"
+	@printf "\tRunning: $(RUNNING)\n"
+	@printf "\nA valid ID will be printed if the container is fully operational.\n\n"
 
 help:
 	@printf "\n"
-	@printf "make		> Displays the help and status messages.\n"
+	@printf "make		> Creates container if it does not exist, then creates a new terminal.\n"
 	@printf "make dockerfile	> Builds the $(NAME) container. Run after editing the Dockerfile.\n"
 	@printf "make container	> Creates a new $(NAME) container, and keeps it running in the background.\n"
 	@printf "make terminal	> Enters the $(NAME) container from a new terminal.\n"
 	@printf "make clean	> Stops and removes the $(NAME) container.\n"
 	@printf "make deepclean	> Deletes old versions of the $(NAME) container. May help recover some storage.\n"
 	@printf "make status	> Prints out a status message indicating whether the $(NAME) container is running.\n"
-	@printf "make all	> Builds, runs, and creates a new terminal for the $(NAME) container.\n"
 	@printf "make help	> Prints out this help message.\n"
 	@printf "\n"

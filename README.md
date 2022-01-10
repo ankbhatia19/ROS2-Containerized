@@ -3,19 +3,19 @@
 Created for and primarily used by Triton Robotics, a UCSD competitive robotics team.
 
 - [ROS2: Containerized](#ros2-containerized)
-    - [Features](#features)
-    - [Prerequisites](#prerequisites)
-    - [Setup](#setup)
-    - [Usage](#usage)
-    - [Workspaces](#workspaces)
-    - [Package Installation](#package-installation)
-    - [Issues](#issues)
+  - [Features](#features)
+  - [Prerequisites](#prerequisites)
+  - [Setup](#setup)
+  - [Usage](#usage)
+  - [Workspaces](#workspaces)
+  - [Package Installation](#package-installation)
+  - [Issues](#issues)
 
 ### Features
 
 * Fully modularized: Can be installed onto any system with the appropriate prerequisites
 * Includes all dependencies required for base ROS2 development using [ROS2 Foxy Fitzroy](https://docs.ros.org/en/foxy/Releases/Release-Foxy-Fitzroy.html)
-* Automated install, powered by Docker
+* Automated, one line installation, powered by Docker
 * Ease of accessibility, powered by a custom Makefile
 
 ### Prerequisites
@@ -40,22 +40,20 @@ Created for and primarily used by Triton Robotics, a UCSD competitive robotics t
 git clone https://github.com/ankbhatia19/ROS2-Containerized.git
 ```
 
-2. `cd` into the newly created folder. Run `make all`.
+2. `cd` into the newly created folder. Run `make`.
 
 ### Usage
 
 `cd` inside the ROS2-Containerized folder (Where the Makefile and Dockerfile files are located). The Makefile provides a set of commands available for ease of accessibility.
 
-* `make help`: Prints out all commands available to use.
-* `make container`: Creates a container which utilizes Ubuntu 21.04 LTS and has ROS2 and all dependencies installed.
-  * The container will stop running whenever your computer is shut down.
-    * `make container` will have to be manuallly run after computer startup **once** before usage.
-  * Re-running `make container` while a container is already running will delete the previous, running container and replace it with a new one.
-* `make terminal`: "Teleports" you inside the ROS2 container, allowing you to access all ROS2 commands.
-  * This command can be run from many different instances of a terminal to access the same container, allowing you to run multiple nodes inside the same container.
-  * Many terminals, one container.
-* `make clean`: Stops the container, if it is running.
+* `make`: Enters the container, allowing you to run ROS2 commands.
+  * If ROS2 has not been downloaded, installation is automatically started
+  * Automatically creates container if a container has not yet been created
+  * Creates a new bash terminal which is running inside the container.
+* `make clean`: Stops currently running container.
 * `make status`: Indicates whether the container is running or not.
+
+Additional commands can be seen by running `make help`.
 
 ### Workspaces
 
@@ -77,7 +75,7 @@ Since container based systems do not remember installations after the container 
       && rm -rf /var/lib/apt/lists/*
   ```
 * After updating the Dockerfile, run `make dockerfile` to install added packages and regenerate the container image.
-* Restart the container using `make container`
+* Restart the container by running `make clean`, then `make`.
 
 ### Issues
 
