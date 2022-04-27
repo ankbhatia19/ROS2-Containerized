@@ -44,6 +44,7 @@ container: clean xsetup
 		-v $(XAUTH):$(XAUTH):rw \
 		-v $(PWD)/workspaces:/root/workspaces \
     		-v /tmp/.gazebo:/root/.gazebo \
+		--net host \
     		--name $(NAME) \
     		$(NAME)
 	@printf "\n$(NAME) container running: Use <make terminal> to enter container.\n\n"
