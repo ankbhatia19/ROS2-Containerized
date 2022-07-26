@@ -79,6 +79,6 @@ Since container based systems do not remember installations after the container 
 
 ### Issues
 
-Issues can be reported using the corresponding GitHub tab, or by contacting the developer using Discord at `zesty#9999`
+Issues can be reported using the corresponding GitHub tab, or by contacting the developer using Discord at `Waycey#9999`
 
 Tested on: Ubuntu 18.04, Ubuntu 21.04, Fedora 35, and Arch Linux
