@@ -1,53 +1,51 @@
 NAME = ros2
+DOCKERFILE = Dockerfile
 
 # The following variables are used to control the automatic generation of the docker container
 CREATED = $$(docker images -q $(NAME) 2> /dev/null)
 RUNNING = $$(docker ps -q -f name=$(NAME))
-EXISTS = $$(docker ps -aq -f name=$(NAME))
 
 # Mount points for X authorization
 XSOCK = /tmp/.X11-unix
 XAUTH = /tmp/.docker.xauth
 
+# Mount point for docker socket
+DOCKER_SOCK = /var/run/docker.sock
+
 # Default rule for creating and running the container
-default:
-	@if [ ! $(CREATED) ]; then \
-		$(MAKE) dockerfile; \
-	fi
-	@if [ ! $(RUNNING) ]; then \
-		$(MAKE) container; \
-	fi
-	@$(MAKE) terminal
+default: dockerfile container terminal
 
 
 dockerfile:
-	docker build -t $(NAME) .
+	@if [ ! $(CREATED) ]; then \
+		docker build -f $(DOCKERFILE) -t $(NAME) .; \
+	fi
+
+rebuild:
+	@docker build -f $(DOCKERFILE) -t $(NAME) .
 
 xsetup:
 	@touch $(XAUTH)
 	@xauth nlist $(DISPLAY) | sed -e 's/^..../ffff/' | xauth -f $(XAUTH) nmerge -
 
-container: clean xsetup
-	@if [ $(RUNNING) ]; then \
-		printf "\n$(NAME) container already running: Use <make terminal> to enter container.\n\n"; \
-		exit 1; \
-	fi
-	@docker run -dt \
-		--privileged \
-    		-p $1:8800 \
-    		--rm \
+container: xsetup
+	@if [ ! $(RUNNING) ]; then \
+		docker run -dt \
+    	-p $1:8800 \
+    	--rm \
 		--shm-size="2g" \
-    		-e XAUTHORITY=$(XAUTH) \
+    	-e XAUTHORITY=$(XAUTH) \
 		-e DISPLAY=$(DISPLAY) \
-    		-e QT_GRAPHICSSYSTEM=native \
+    	-e QT_GRAPHICSSYSTEM=native \
 		-v $(XSOCK):$(XSOCK):rw \
 		-v $(XAUTH):$(XAUTH):rw \
-		-v $(PWD)/workspaces:/root/workspaces \
-    		-v /tmp/.gazebo:/root/.gazebo \
-		--net host \
-    		--name $(NAME) \
-    		$(NAME)
-	@printf "\n$(NAME) container running: Use <make terminal> to enter container.\n\n"
+		-v $(DOCKER_SOCK):$(DOCKER_SOCK):rw \
+		-v $(PWD)/../../../dVRL_private:/root/code/dVRL_private \
+		-p 19997:19997 \
+    	--name $(NAME) \
+    	$(NAME); \
+	fi
+	
 
 terminal:
 	@if [ ! $(RUNNING) ]; then \
@@ -62,10 +60,6 @@ clean:
 		printf "\nStopping $(NAME) container.\n"; \
 		docker stop $(NAME); \
 	fi
-	@if [ $(EXISTS) ]; then \
-		printf "\nDeleting $(NAME) container.\n"; \
-		docker rm $(NAME); \
-	fi
 
 deepclean: clean
 	@docker system prune -af
@@ -79,7 +73,7 @@ status:
 help:
 	@printf "\n"
 	@printf "make		> Creates container if it does not exist, then creates a new terminal.\n"
-	@printf "make dockerfile	> Builds the $(NAME) container. Run after editing the Dockerfile.\n"
+	@printf "make rebuild	> Rebuilds the $(NAME) container. Run after editing the Dockerfile.\n"
 	@printf "make container	> Creates a new $(NAME) container, and keeps it running in the background.\n"
 	@printf "make terminal	> Enters the $(NAME) container from a new terminal.\n"
 	@printf "make clean	> Stops and removes the $(NAME) container.\n"
