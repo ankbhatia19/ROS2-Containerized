@@ -40,7 +40,7 @@ container: xsetup
 		-v $(XSOCK):$(XSOCK):rw \
 		-v $(XAUTH):$(XAUTH):rw \
 		-v $(DOCKER_SOCK):$(DOCKER_SOCK):rw \
-		-v $(PWD)/../../../dVRL_private:/root/code/dVRL_private \
+		-v $(PWD)/workspaces:/root/workspaces \
 		-p 19997:19997 \
     	--name $(NAME) \
     	$(NAME); \
